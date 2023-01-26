@@ -1,9 +1,10 @@
 import { Button, Text, TextInput } from '@ignite-ui/react'
 import { ArrowRight } from 'phosphor-react'
-import { useForm } from 'react-hook-form'
 import { Form, FormAnnotation } from './styles'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useRouter } from 'next/router'
 
 const claimUsernameFormSchema = z.object({
   username: z
@@ -19,12 +20,20 @@ const claimUsernameFormSchema = z.object({
 type ClaimUsernameFormData = z.infer<typeof claimUsernameFormSchema>
 
 export function ClaimUsernameForm() {
-  const { register, handleSubmit, formState } = useForm<ClaimUsernameFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<ClaimUsernameFormData>({
     resolver: zodResolver(claimUsernameFormSchema),
   })
 
+  const router = useRouter()
+
   async function handleClaimUsername(data: ClaimUsernameFormData) {
-    console.log(data)
+    const { username } = data
+
+    await router.push(`/register?username=${username}`)
   }
 
   return (
@@ -36,7 +45,7 @@ export function ClaimUsernameForm() {
           placeholder="Seu usuario"
           {...register('username')}
         />
-        <Button size={'sm'} type="submit">
+        <Button size={'sm'} type="submit" disabled={isSubmitting}>
           Reservar usuario
           <ArrowRight />
         </Button>
@@ -44,8 +53,8 @@ export function ClaimUsernameForm() {
 
       <FormAnnotation>
         <Text size="sm">
-          {formState.errors.username
-            ? formState.errors.username.message
+          {errors.username
+            ? errors.username.message
             : 'Digite o nome do usuario'}
         </Text>
       </FormAnnotation>
