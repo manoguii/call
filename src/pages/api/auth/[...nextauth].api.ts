@@ -1,8 +1,10 @@
+import { PrismaAdapter } from '@/lib/auth/prisma.adapter'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
 export const authOptions: NextAuthOptions = {
-  // Configure one or more authentication providers
+  adapter: PrismaAdapter(),
+
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
@@ -15,6 +17,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+
   callbacks: {
     async signIn({ account }) {
       if (
