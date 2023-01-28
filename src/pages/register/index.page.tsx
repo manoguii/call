@@ -21,7 +21,7 @@ const registerFormSchema = z.object({
   name: z
     .string()
     .min(3, { message: 'O nome precisa ter no minimo 3 letras' })
-    .max(15, { message: 'O nome precisa ter no maximo 15 letras' }),
+    .max(25, { message: 'O nome precisa ter no maximo 25 letras' }),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
@@ -77,7 +77,7 @@ export default function Register() {
         <label>
           <Text size="sm">Nome de usuario</Text>
           <TextInput
-            prefix="manogui.com/"
+            prefix="call.com/"
             placeholder="seu-usuario"
             {...register('username')}
           />
