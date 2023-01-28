@@ -11,14 +11,15 @@ datasource db {
 }
 
 model User {
-  id         String    @id @default(uuid())
-  username   String    @unique
-  name       String
-  email      String?   @unique
-  avatar_url String?
-  created_at DateTime  @default(now())
-  accounts   Account[]
-  sessions   Session[]
+  id            String             @id @default(uuid())
+  username      String             @unique
+  name          String
+  email         String?            @unique
+  avatar_url    String?
+  created_at    DateTime           @default(now())
+  accounts      Account[]
+  sessions      Session[]
+  timeIntervals UserTimeInterval[]
 
   @@map("users")
 }
@@ -51,4 +52,16 @@ model Session {
   user          User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("sessions")
+}
+
+model UserTimeInterval {
+  id                    String @id @default(uuid())
+  week_day              Int
+  time_start_in_minutes Int
+  time_end_in_minutes   Int
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@map("user_time_intervals")
 }
