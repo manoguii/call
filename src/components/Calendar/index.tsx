@@ -13,15 +13,20 @@ import {
 
 interface CalendarWeek {
   week: number
-  day: Array<{
-    data: dayjs.Dayjs
+  days: Array<{
+    date: dayjs.Dayjs
     disabled: boolean
   }>
 }
 
 type CalendarWeeks = CalendarWeek[]
 
-export function Calendar() {
+interface CalendarProps {
+  selectedDate?: Date | null
+  onDateSelected: (date: Date) => void
+}
+
+export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
   const [currentDate, setCurrentDate] = useState(() => {
     return dayjs().set('date', 1)
   })
@@ -76,14 +81,14 @@ export function Calendar() {
     })
 
     const calendarDays = [
-      ...previousMonthFillArray.map((data) => {
-        return { data, disabled: true }
+      ...previousMonthFillArray.map((date) => {
+        return { date, disabled: true }
       }),
-      ...daysInMonthArray.map((data) => {
-        return { data, disabled: false }
+      ...daysInMonthArray.map((date) => {
+        return { date, disabled: date.endOf('day').isBefore(new Date()) }
       }),
-      ...nextMonthFillArray.map((data) => {
-        return { data, disabled: true }
+      ...nextMonthFillArray.map((date) => {
+        return { date, disabled: true }
       }),
     ]
 
@@ -94,7 +99,7 @@ export function Calendar() {
         if (isNewWeek) {
           weeks.push({
             week: i / 7 + 1,
-            day: original.slice(i, i + 7),
+            days: original.slice(i, i + 7),
           })
         }
 
@@ -135,14 +140,17 @@ export function Calendar() {
         </thead>
 
         <tbody>
-          {calendarWeeks.map(({ week, day }) => {
+          {calendarWeeks.map(({ week, days }) => {
             return (
               <tr key={week}>
-                {day.map(({ data, disabled }) => {
+                {days.map(({ date, disabled }) => {
                   return (
-                    <td key={data.toString()}>
-                      <CalendarDay disabled={disabled}>
-                        {data.get('date')}
+                    <td key={date.toString()}>
+                      <CalendarDay
+                        onClick={() => onDateSelected(date.toDate())}
+                        disabled={disabled}
+                      >
+                        {date.get('date')}
                       </CalendarDay>
                     </td>
                   )
