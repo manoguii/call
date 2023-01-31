@@ -34,6 +34,11 @@ export const TimePicker = styled('div', {
   bottom: 0,
   right: 0,
   widows: 280,
+
+  '@media(max-width: 900px)': {
+    position: 'relative',
+    borderTop: '1px solid $gray600',
+  },
 })
 
 export const TimePickerHeader = styled(Text, {
