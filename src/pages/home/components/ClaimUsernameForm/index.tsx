@@ -9,10 +9,10 @@ import { useRouter } from 'next/router'
 const claimUsernameFormSchema = z.object({
   username: z
     .string()
-    .min(3, { message: 'O usuário precisa ter no mínimo 3 letras !' })
-    .max(10)
-    .regex(/^([a-z\\-]+)$/i, {
-      message: 'O usuário precisa apenas letras e hifens !',
+    .min(3, { message: 'O usuário precisa ter no mínimo 3 caracteres !' })
+    .max(20, { message: 'O usuário precisa ter no máximo 20 caracteres !' })
+    .regex(/^[A-Za-z][A-Za-z0-9_]{3,20}$/i, {
+      message: 'O usuário deve conter apenas letras números e _ !',
     })
     .transform((username) => username.toLowerCase()),
 })
@@ -41,10 +41,11 @@ export function ClaimUsernameForm() {
       <Form as="form" onSubmit={handleSubmit(handleClaimUsername)}>
         <TextInput
           size="sm"
-          prefix="manogui.com/"
+          prefix="call.com/"
           placeholder="Seu usuário"
           {...register('username')}
         />
+
         <Button size="sm" type="submit" disabled={isSubmitting}>
           Reservar
           <ArrowRight />
