@@ -4,9 +4,13 @@ import { Container, Form, FormError, Header } from './styles'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
+import { api } from '@/lib/axios'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
+import { ThreeDots } from 'react-loader-spinner'
 
 const registerFormSchema = z.object({
   username: z
@@ -20,12 +24,14 @@ const registerFormSchema = z.object({
   name: z
     .string()
     .min(5, { message: 'O nome precisa ter no mínimo 5 letras' })
-    .max(20, { message: 'O nome precisa ter no máximo 20 letras' }),
+    .max(25, { message: 'O nome precisa ter no máximo 25 letras' }),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function Register() {
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -48,8 +54,25 @@ export default function Register() {
     }
   }, [router.query?.username, setValue])
 
-  async function handleRegister(data: any) {
-    console.log(data)
+  async function handleRegister(data: RegisterFormData) {
+    try {
+      setIsLoading(true)
+
+      await api.post('/users', {
+        name: data.name,
+        username: data.username,
+      })
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message, {
+          theme: 'dark',
+        })
+      }
+
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -90,10 +113,26 @@ export default function Register() {
             )}
           </label>
 
-          <Button type="submit" disabled={isSubmitting}>
-            Próximo passo
-            <ArrowRight />
-          </Button>
+          {isLoading ? (
+            <div>
+              <ThreeDots
+                height="46"
+                width="46"
+                radius="9"
+                color="#4fa94d"
+                ariaLabel="three-dots-loading"
+                wrapperStyle={{
+                  justifyContent: 'center',
+                }}
+                visible={true}
+              />
+            </div>
+          ) : (
+            <Button type="submit" disabled={isSubmitting}>
+              Próximo passo
+              <ArrowRight />
+            </Button>
+          )}
         </Form>
       </Container>
     </>

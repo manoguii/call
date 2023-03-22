@@ -42,6 +42,7 @@ export function ClaimUsernameForm() {
         <TextInput
           size="sm"
           prefix="call.com/"
+          type="text"
           placeholder="Seu usuário"
           {...register('username')}
         />
