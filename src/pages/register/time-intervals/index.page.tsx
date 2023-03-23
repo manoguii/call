@@ -24,6 +24,10 @@ import { convertTimeStringToMinutes } from '@/utils/convert-time-string-to-minut
 import { api } from '@/lib/axios'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
+import { useState } from 'react'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
+import { ThreeDots } from 'react-loader-spinner'
 
 const timeIntervalsFormSchema = z.object({
   intervals: z
@@ -66,6 +70,8 @@ type TimeIntervalsFormInput = z.input<typeof timeIntervalsFormSchema>
 type TimeIntervalsFormOutput = z.output<typeof timeIntervalsFormSchema>
 
 export default function TimeIntervals() {
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -99,11 +105,25 @@ export default function TimeIntervals() {
   const intervals = watch('intervals')
 
   async function handleSetTimeIntervals(data: any) {
-    const { intervals } = data as TimeIntervalsFormOutput
+    try {
+      setIsLoading(true)
 
-    await api.post('/users/time-intervals', { intervals })
+      const { intervals } = data as TimeIntervalsFormOutput
 
-    await router.push('/register/update-profile')
+      await api.post('/users/time-intervals', { intervals })
+
+      await router.push('/register/update-profile')
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message, {
+          theme: 'colored',
+        })
+      }
+
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -168,10 +188,24 @@ export default function TimeIntervals() {
             <FormErrors size="sm">{errors.intervals.message}</FormErrors>
           )}
 
-          <Button type="submit" disabled={isSubmitting}>
-            Proximo passo
-            <ArrowRight />
-          </Button>
+          {isLoading ? (
+            <div>
+              <ThreeDots
+                height="46"
+                width="46"
+                color="#4fa94d"
+                wrapperStyle={{
+                  justifyContent: 'center',
+                }}
+                visible={true}
+              />
+            </div>
+          ) : (
+            <Button type="submit" disabled={isSubmitting}>
+              Proximo passo
+              <ArrowRight />
+            </Button>
+          )}
         </IntervalBox>
       </Container>
     </>

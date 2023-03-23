@@ -67,7 +67,7 @@ export default function Register() {
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message, {
-          theme: 'dark',
+          theme: 'colored',
         })
       }
 
@@ -120,9 +120,7 @@ export default function Register() {
               <ThreeDots
                 height="46"
                 width="46"
-                radius="9"
                 color="#4fa94d"
-                ariaLabel="three-dots-loading"
                 wrapperStyle={{
                   justifyContent: 'center',
                 }}
