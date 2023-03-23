@@ -4,30 +4,34 @@ import { Container, Form, FormError, Header } from './styles'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import { NextSeo } from 'next-seo'
 import { api } from '@/lib/axios'
 import { AxiosError } from 'axios'
-import { NextSeo } from 'next-seo'
+import { toast } from 'react-toastify'
+import { ThreeDots } from 'react-loader-spinner'
 
 const registerFormSchema = z.object({
   username: z
     .string()
-    .min(3, { message: 'O usuario precisa ter no minimo 3 letras !' })
-    .max(10)
-    .regex(/^([a-z\\-]+)$/i, {
-      message: 'O usuario precisa apenas letras e hifens !',
+    .min(3, { message: 'O usuário precisa ter no mínimo 3 letras !' })
+    .max(20, { message: 'O usuário precisa ter no máximo 20 caracteres !' })
+    .regex(/^[A-Za-z][A-Za-z0-9_]{3,20}$/i, {
+      message: 'O usuário deve conter apenas letras números e _ !',
     })
     .transform((username) => username.toLowerCase()),
   name: z
     .string()
-    .min(3, { message: 'O nome precisa ter no minimo 3 letras' })
-    .max(25, { message: 'O nome precisa ter no maximo 25 letras' }),
+    .min(5, { message: 'O nome precisa ter no mínimo 5 letras' })
+    .max(25, { message: 'O nome precisa ter no máximo 25 letras' }),
 })
 
 type RegisterFormData = z.infer<typeof registerFormSchema>
 
 export default function Register() {
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -41,24 +45,35 @@ export default function Register() {
 
   useEffect(() => {
     if (router.query.username) {
-      setValue('username', String(router.query.username))
+      setValue(
+        'username',
+        Array.isArray(router.query.username)
+          ? router.query.username[0]
+          : router.query.username,
+      )
     }
   }, [router.query?.username, setValue])
 
-  async function handleRegister(data: any) {
+  async function handleRegister(data: RegisterFormData) {
     try {
+      setIsLoading(true)
+
       await api.post('/users', {
         name: data.name,
         username: data.username,
       })
 
       await router.push('/register/connect-calendar')
-    } catch (err) {
-      if (err instanceof AxiosError && err?.response?.data.message) {
-        return alert(err.response.data.message)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message, {
+          theme: 'colored',
+        })
       }
 
-      console.log(err)
+      console.error(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -79,10 +94,10 @@ export default function Register() {
 
         <Form as="form" onSubmit={handleSubmit(handleRegister)}>
           <label>
-            <Text size="sm">Nome de usuario</Text>
+            <Text size="sm">Nome de usuário</Text>
             <TextInput
               prefix="call.com/"
-              placeholder="seu-usuario"
+              placeholder="seu-usuário"
               {...register('username')}
             />
 
@@ -100,10 +115,24 @@ export default function Register() {
             )}
           </label>
 
-          <Button type="submit" disabled={isSubmitting}>
-            Próximo passo
-            <ArrowRight />
-          </Button>
+          {isLoading ? (
+            <div>
+              <ThreeDots
+                height="46"
+                width="46"
+                color="#4fa94d"
+                wrapperStyle={{
+                  justifyContent: 'center',
+                }}
+                visible={true}
+              />
+            </div>
+          ) : (
+            <Button type="submit" disabled={isSubmitting}>
+              Próximo passo
+              <ArrowRight />
+            </Button>
+          )}
         </Form>
       </Container>
     </>

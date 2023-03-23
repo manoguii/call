@@ -10,6 +10,7 @@ export default async function handler(
     return res.status(405).end()
   }
 
+  // Retorna todos horários disponíveis do usuário que não tenha agendamento
   // http://localhost:3000/api/users/manogui/availability?date=2023-01-30
 
   const username = String(req.query.username)
@@ -76,7 +77,7 @@ export default async function handler(
     where: {
       user_id: user.id,
       date: {
-        // greater than or equal
+        // greater than or equal (GTE)
         gte: referenceDate.set('hour', startHour).toDate(),
         lte: referenceDate.set('hour', endHour).toDate(),
       },

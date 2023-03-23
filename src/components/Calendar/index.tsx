@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { CaretLeft, CaretRight } from 'phosphor-react'
 import { useMemo, useState } from 'react'
+import { ThreeDots } from 'react-loader-spinner'
 import {
   CalendarActions,
   CalendarBody,
@@ -60,7 +61,7 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
 
   const username = String(router.query.username)
 
-  const { data: blockedDates } = useQuery<BlockedDates>(
+  const { data: blockedDates, isLoading } = useQuery<BlockedDates>(
     ['blocked-dates', currentDate.get('year'), currentDate.get('month')],
     async () => {
       const response = await api.get(`/users/${username}/blocked-dates`, {
@@ -116,8 +117,11 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
         return {
           date,
           disabled:
+            // Data ja passou
             date.endOf('day').isBefore(new Date()) ||
+            // Data bloqueada pelo usuário
             blockedDates.blockedWeekDays.includes(date.get('day')) ||
+            // Data cheia
             blockedDates.blockedDays.includes(date.get('date')),
         }
       }),
@@ -162,36 +166,52 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
         </CalendarActions>
       </CalendarHeader>
 
-      <CalendarBody>
-        <thead>
-          <tr>
-            {shortWeekDay.map((weekDay) => {
-              return <th key={weekDay}>{weekDay}.</th>
-            })}
-          </tr>
-        </thead>
+      {isLoading ? (
+        <div style={{ height: '100%' }}>
+          <ThreeDots
+            height="56"
+            width="56"
+            color="#4fa94d"
+            wrapperStyle={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}
+            visible={true}
+          />
+        </div>
+      ) : (
+        <CalendarBody>
+          <thead>
+            <tr>
+              {shortWeekDay.map((weekDay) => {
+                return <th key={weekDay}>{weekDay}.</th>
+              })}
+            </tr>
+          </thead>
 
-        <tbody>
-          {calendarWeeks.map(({ week, days }) => {
-            return (
-              <tr key={week}>
-                {days.map(({ date, disabled }) => {
-                  return (
-                    <td key={date.toString()}>
-                      <CalendarDay
-                        onClick={() => onDateSelected(date.toDate())}
-                        disabled={disabled}
-                      >
-                        {date.get('date')}
-                      </CalendarDay>
-                    </td>
-                  )
-                })}
-              </tr>
-            )
-          })}
-        </tbody>
-      </CalendarBody>
+          <tbody>
+            {calendarWeeks.map(({ week, days }) => {
+              return (
+                <tr key={week}>
+                  {days.map(({ date, disabled }) => {
+                    return (
+                      <td key={date.toString()}>
+                        <CalendarDay
+                          onClick={() => onDateSelected(date.toDate())}
+                          disabled={disabled}
+                        >
+                          {date.get('date')}
+                        </CalendarDay>
+                      </td>
+                    )
+                  })}
+                </tr>
+              )
+            })}
+          </tbody>
+        </CalendarBody>
+      )}
     </CalendarContainer>
   )
 }

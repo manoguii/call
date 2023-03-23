@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { ThreeDots } from 'react-loader-spinner'
 import {
   Container,
   TimePicker,
@@ -18,10 +19,10 @@ interface Availability {
 }
 
 interface CalendarStepProps {
-  onSelectDateTime: (date: Date) => void
+  onSetSelectDateTime: (date: Date) => void
 }
 
-export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
+export function CalendarStep({ onSetSelectDateTime }: CalendarStepProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const router = useRouter()
@@ -40,7 +41,7 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
     ? dayjs(selectedDate).format('YYYY-MM-DD')
     : null
 
-  const { data: availability } = useQuery<Availability>(
+  const { data: availability, isLoading } = useQuery<Availability>(
     ['availability', selectedDateWithoutTime],
     async () => {
       const response = await api.get(`/users/${username}/availability`, {
@@ -57,12 +58,13 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
   )
 
   function handleSelectTime(hr: number) {
+    // Cria data com a hora e dia selecionado pelo usuário
     const dateWithTime = dayjs(selectedDate)
       .set('hour', hr)
       .startOf('hour')
       .toDate()
 
-    onSelectDateTime(dateWithTime)
+    onSetSelectDateTime(dateWithTime)
   }
 
   return (
@@ -75,19 +77,35 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
             {weekDay} <span>{describedDate}</span>
           </TimePickerHeader>
 
-          <TimePickerList>
-            {availability?.possibleTimes.map((hr) => {
-              return (
-                <TimePickerItem
-                  key={hr}
-                  onClick={() => handleSelectTime(hr)}
-                  disabled={!availability.availableTimes.includes(hr)}
-                >
-                  {String(hr).padStart(2, '0')}:00h
-                </TimePickerItem>
-              )
-            })}
-          </TimePickerList>
+          {isLoading ? (
+            <div style={{ height: '100%' }}>
+              <ThreeDots
+                height="46"
+                width="46"
+                color="#4fa94d"
+                wrapperStyle={{
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  height: '100%',
+                }}
+                visible={true}
+              />
+            </div>
+          ) : (
+            <TimePickerList>
+              {availability?.possibleTimes.map((hr) => {
+                return (
+                  <TimePickerItem
+                    key={hr}
+                    onClick={() => handleSelectTime(hr)}
+                    disabled={!availability.availableTimes.includes(hr)}
+                  >
+                    {String(hr).padStart(2, '0')}:00h
+                  </TimePickerItem>
+                )
+              })}
+            </TimePickerList>
+          )}
         </TimePicker>
       )}
     </Container>

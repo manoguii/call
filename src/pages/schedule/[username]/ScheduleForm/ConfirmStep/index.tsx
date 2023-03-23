@@ -1,10 +1,14 @@
 import { api } from '@/lib/axios'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, Text, TextArea, TextInput } from '@ignite-ui/react'
+import { AxiosError } from 'axios'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { CalendarBlank, Clock } from 'phosphor-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { ThreeDots } from 'react-loader-spinner'
+import { toast } from 'react-toastify'
 import { z } from 'zod'
 import { ConfirmForm, FormActions, FormError, FormHeader } from './styles'
 
@@ -27,6 +31,8 @@ export function ConfirmStep({
   schedulingDate,
   onCancelConfirmation,
 }: ConfirmStepProps) {
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -40,16 +46,30 @@ export function ConfirmStep({
   const username = String(router.query.username)
 
   async function handleConfirmSchedule(data: ConfirmFormData) {
-    const { email, name, observations } = data
+    try {
+      setIsLoading(true)
 
-    await api.post(`/users/${username}/schedule`, {
-      name,
-      email,
-      observations,
-      date: schedulingDate,
-    })
+      const { email, name, observations } = data
 
-    onCancelConfirmation()
+      await api.post(`/users/${username}/schedule`, {
+        name,
+        email,
+        observations,
+        date: schedulingDate,
+      })
+
+      onCancelConfirmation()
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message, {
+          theme: 'colored',
+        })
+      }
+
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const describeDate = dayjs(schedulingDate).format('DD[ de ]MMMM[ de ]YYYY')
@@ -95,9 +115,32 @@ export function ConfirmStep({
         <Button type="button" variant="tertiary" onClick={onCancelConfirmation}>
           Cancelar
         </Button>
-        <Button type="submit" disabled={isSubmitting}>
-          Confirmar
-        </Button>
+
+        {isLoading ? (
+          <div
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              display: 'flex',
+              width: '120px',
+            }}
+          >
+            <ThreeDots
+              height="40"
+              width="40"
+              color="#4fa94d"
+              wrapperStyle={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+              visible={true}
+            />
+          </div>
+        ) : (
+          <Button type="submit" disabled={isSubmitting}>
+            Confirmar
+          </Button>
+        )}
       </FormActions>
     </ConfirmForm>
   )

@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import { google } from 'googleapis'
 import { prisma } from './prisma'
 
+//
 export async function getGoogleOauthToken(userId: string) {
   const account = await prisma.account.findFirstOrThrow({
     where: {
@@ -25,9 +26,14 @@ export async function getGoogleOauthToken(userId: string) {
     return auth
   }
 
+  // --> expires_at é salvo no formato epoch & unix timestamp
+
+  // account.expires_at * 1000 --> converte ( unix timestamp ) para (milissegundos)
+  // isTokenExpired --> verifica se a data de expiração do token e anterior a data atual
   const isTokenExpired = dayjs(account.expires_at * 1000).isBefore(new Date())
 
   if (isTokenExpired) {
+    // faz o refresh do token
     const { credentials } = await auth.refreshAccessToken()
 
     const {

@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -40,8 +37,7 @@ model Account {
   scope               String?
   id_token            String? @db.Text
   session_state       String?
-
-  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user                User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([provider, provider_account_id])
   @@index([user_id])
@@ -64,9 +60,8 @@ model UserTimeInterval {
   week_day              Int
   time_start_in_minutes Int
   time_end_in_minutes   Int
-
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id String
+  user                  User   @relation(fields: [user_id], references: [id])
+  user_id               String
 
   @@index([user_id])
   @@map("user_time_intervals")
@@ -79,9 +74,8 @@ model Scheduling {
   email        String
   observations String?
   created_at   DateTime @default(now())
-
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id String
+  user         User     @relation(fields: [user_id], references: [id])
+  user_id      String
 
   @@index([user_id])
   @@map("schedulings")

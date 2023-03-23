@@ -29,7 +29,7 @@ export default function Home() {
             src={previewImage}
             height={400}
             quality={100}
-            alt="Calendario simbolizando aplicação em funcionamento"
+            alt="Calendário simbolizando aplicação em funcionamento"
             priority
           />
         </Preview>

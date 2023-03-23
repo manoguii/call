@@ -14,11 +14,15 @@ import { Container, Header } from '../styles'
 import { FormAnnotation, ProfileBox } from './styles'
 import { useSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
-import { unstable_getServerSession } from 'next-auth'
+import { getServerSession } from 'next-auth'
 import { buildNextAuthOptions } from '@/pages/api/auth/[...nextauth].api'
 import { api } from '@/lib/axios'
 import { useRouter } from 'next/router'
 import { NextSeo } from 'next-seo'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
+import { useState } from 'react'
+import { ThreeDots } from 'react-loader-spinner'
 
 const updateProfileData = z.object({
   bio: z.string(),
@@ -27,6 +31,8 @@ const updateProfileData = z.object({
 type RegisterFormData = z.infer<typeof updateProfileData>
 
 export default function UpdateProfile() {
+  const [isLoading, setIsLoading] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -40,11 +46,25 @@ export default function UpdateProfile() {
   const router = useRouter()
 
   async function handleUpdateProfile(data: RegisterFormData) {
-    await api.put('/users/profile', {
-      bio: data.bio,
-    })
+    try {
+      setIsLoading(true)
 
-    await router.push(`/schedule/${session.data?.user.username}`)
+      await api.put('/users/profile', {
+        bio: data.bio,
+      })
+
+      await router.push(`/schedule/${session.data?.user.username}`)
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message, {
+          theme: 'colored',
+        })
+      }
+
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -53,7 +73,7 @@ export default function UpdateProfile() {
 
       <Container>
         <Header>
-          <Heading as="strong">Defina sua disponibilidade</Heading>
+          <Heading as="strong">Bem vindo ao Call !</Heading>
           <Text>Por último, uma breve descrição e uma foto de perfil.</Text>
 
           <MultiStep size={4} currentStep={4} />
@@ -76,10 +96,24 @@ export default function UpdateProfile() {
             </FormAnnotation>
           </label>
 
-          <Button type="submit" disabled={isSubmitting}>
-            Finalizar
-            <ArrowRight />
-          </Button>
+          {isLoading ? (
+            <div>
+              <ThreeDots
+                height="46"
+                width="46"
+                color="#4fa94d"
+                wrapperStyle={{
+                  justifyContent: 'center',
+                }}
+                visible={true}
+              />
+            </div>
+          ) : (
+            <Button type="submit" disabled={isSubmitting}>
+              Finalizar
+              <ArrowRight />
+            </Button>
+          )}
         </ProfileBox>
       </Container>
     </>
@@ -87,7 +121,7 @@ export default function UpdateProfile() {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
-  const session = await unstable_getServerSession(
+  const session = await getServerSession(
     req,
     res,
     buildNextAuthOptions(req, res),

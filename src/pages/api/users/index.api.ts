@@ -1,10 +1,16 @@
 import { prisma } from '@/lib/prisma'
+import { Prisma } from '@prisma/client'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { setCookie } from 'nookies'
 
+interface IResponseData {
+  user?: Prisma.UserCreateInput
+  message?: string
+}
+
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse<IResponseData>,
 ) {
   if (req.method !== 'POST') {
     return res.status(405).end()
@@ -20,7 +26,7 @@ export default async function handler(
 
   if (userExists) {
     return res.status(400).json({
-      message: 'User already exists',
+      message: 'Nome de usuário ja existe',
     })
   }
 
@@ -36,5 +42,5 @@ export default async function handler(
     path: '/',
   })
 
-  return res.status(201).json(user)
+  return res.status(201).json({ user })
 }

@@ -1,16 +1,19 @@
 import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
+import { Check } from '@phosphor-icons/react'
 import { signIn, useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
-import { ArrowRight, Check } from 'phosphor-react'
+import { ArrowRight } from 'phosphor-react'
 import { Container, Header } from '../styles'
 import { AuthError, ConnectBox, ConnectItem } from './styles'
 
 export default function ConnectCalendar() {
   const session = useSession()
+
   const router = useRouter()
 
-  const hasAuthError = !!router.query.error
+  const hasAuthError =
+    !!router.query.error && session.status !== 'authenticated'
 
   const isSignedIn = session.status === 'authenticated'
 
@@ -60,7 +63,7 @@ export default function ConnectCalendar() {
 
           {hasAuthError && (
             <AuthError size="sm">
-              Falha ao se conectar com Google, verifique se voçe habilitou as
+              Falha ao se conectar com Google, verifique se você habilitou as
               permissões de acesso ao Google Calendar
             </AuthError>
           )}

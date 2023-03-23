@@ -1,11 +1,12 @@
+import 'react-toastify/dist/ReactToastify.min.css'
 import '../lib/dayjs'
-
-import { globalStyles } from '@/styles/global'
 import { SessionProvider } from 'next-auth/react'
+import { globalStyles } from '@/styles/global'
 import type { AppProps } from 'next/app'
-import { QueryClientProvider } from '@tanstack/react-query'
-import { queryClient } from '@/lib/react-query'
+import { ToastContainer } from 'react-toastify'
 import { DefaultSeo } from 'next-seo'
+import { queryClient } from '@/lib/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 
 globalStyles()
 
@@ -14,8 +15,10 @@ export default function App({
   pageProps: { session, ...pageProps },
 }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SessionProvider session={session}>
+    <SessionProvider session={session}>
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+
         <DefaultSeo
           openGraph={{
             type: 'website',
@@ -29,8 +32,19 @@ export default function App({
             cardType: 'summary_large_image',
           }}
         />
-        <Component {...pageProps} />
-      </SessionProvider>
-    </QueryClientProvider>
+
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
+      </QueryClientProvider>
+    </SessionProvider>
   )
 }

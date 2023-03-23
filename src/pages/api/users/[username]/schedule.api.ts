@@ -2,7 +2,6 @@ import { getGoogleOauthToken } from '@/lib/google'
 import { prisma } from '@/lib/prisma'
 import dayjs from 'dayjs'
 import { google } from 'googleapis'
-// import dayjs from 'dayjs'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { z } from 'zod'
 
@@ -75,7 +74,7 @@ export default async function handler(
     calendarId: 'primary',
     conferenceDataVersion: 1,
     requestBody: {
-      summary: `call: ${name}`,
+      summary: `Call: ${name}`,
       description: observations,
       start: {
         dateTime: schedulingDate.format(),

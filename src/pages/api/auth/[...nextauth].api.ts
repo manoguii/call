@@ -1,4 +1,4 @@
-import { PrismaAdapter } from '@/lib/auth/prisma.adapter'
+import { PrismaAdapter } from '@/lib/auth/prisma-adapter'
 import { NextApiRequest, NextApiResponse, NextPageContext } from 'next'
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import GoogleProvider, { GoogleProfile } from 'next-auth/providers/google'
@@ -16,6 +16,7 @@ export function buildNextAuthOptions(
         clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
         authorization: {
           params: {
+            // Opções para forçar a api do google enviar o refresh-token no login
             prompt: 'consent',
             access_type: 'offline',
             response_type: 'code',
@@ -23,6 +24,7 @@ export function buildNextAuthOptions(
               'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/calendar',
           },
         },
+
         profile(profile: GoogleProfile) {
           return {
             id: profile.sub,
