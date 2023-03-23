@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma'
-// import dayjs from 'dayjs'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(
@@ -10,7 +9,7 @@ export default async function handler(
     return res.status(405).end()
   }
 
-  //
+  // Retorna todas datas e dias da semana que estão bloqueados ou cheios
   // http://localhost:3000/api/users/manogui/blocked-dates?year=2023&month=01
 
   const username = String(req.query.username)
@@ -46,6 +45,7 @@ export default async function handler(
     )
   })
 
+  // Datas com todos horários marcados
   const blockedDatesRaw: Array<{ date: number }> = await prisma.$queryRaw`
     SELECT
       EXTRACT(DAY FROM S.date) AS date,

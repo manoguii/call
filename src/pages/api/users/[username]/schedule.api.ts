@@ -74,7 +74,7 @@ export default async function handler(
     calendarId: 'primary',
     conferenceDataVersion: 1,
     requestBody: {
-      summary: `call: ${name}`,
+      summary: `Call: ${name}`,
       description: observations,
       start: {
         dateTime: schedulingDate.format(),

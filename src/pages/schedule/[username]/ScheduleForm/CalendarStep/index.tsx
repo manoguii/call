@@ -19,10 +19,10 @@ interface Availability {
 }
 
 interface CalendarStepProps {
-  onSelectDateTime: (date: Date) => void
+  onSetSelectDateTime: (date: Date) => void
 }
 
-export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
+export function CalendarStep({ onSetSelectDateTime }: CalendarStepProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
 
   const router = useRouter()
@@ -58,12 +58,13 @@ export function CalendarStep({ onSelectDateTime }: CalendarStepProps) {
   )
 
   function handleSelectTime(hr: number) {
+    // Cria data com a hora e dia selecionado pelo usuário
     const dateWithTime = dayjs(selectedDate)
       .set('hour', hr)
       .startOf('hour')
       .toDate()
 
-    onSelectDateTime(dateWithTime)
+    onSetSelectDateTime(dateWithTime)
   }
 
   return (

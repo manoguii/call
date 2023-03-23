@@ -117,8 +117,11 @@ export function Calendar({ selectedDate, onDateSelected }: CalendarProps) {
         return {
           date,
           disabled:
+            // Data ja passou
             date.endOf('day').isBefore(new Date()) ||
+            // Data bloqueada pelo usuário
             blockedDates.blockedWeekDays.includes(date.get('day')) ||
+            // Data cheia
             blockedDates.blockedDays.includes(date.get('date')),
         }
       }),
