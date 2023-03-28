@@ -14,34 +14,51 @@
 
 ## Instalação
 
+- Crie um app no console do Google para a parte de autenticação.
+
+- Crie um arquivo ```.env.local``` na raiz do projeto e preencha as variáveis ambiente, o exemplo de como deve ficar esta em ```.env.example```
+
+- Clone o repositório
 ```bash
-# Clone o repositório
 $ git clone https://github.com/manoguii/call.git
-# Entre no repositório
-$ cd call
-# Criar as variáveis ambiente em
-$ .env
-# Instale as dependências
+```
+
+- Instale as dependências
+```bash
 $ npm install
-# Execute a aplicação
+```
+
+- Crie o banco de dados local
+```bash
+$ docker run --name mysql -e MYSQL_ROOT_PASSWORD=docker -p 3306:3306 mysql:latest
+```
+
+- Rodar as migrations
+```bash
+$ npx prisma migrate dev
+```
+
+- Iniciar o projeto
+```bash
+$ npm run build
 $ npm run start
 ```
 
 ## Sobre
 
-O projeto call é uma aplicação full stack de agendamento, integrada ao Google Calendar que permite agendar compromissos com outros usuários, basta criar uma conta no app e enviar o link do seu calendário, ai a pessoa ja vai poder agendar um horário com voce e o compromisso vai aparecer no seu Google Calendar automaticamente 🚀
+O projeto call é uma aplicação full stack de agendamento, integrada ao Google Calendar que permite agendar compromissos com outros usuários, basta criar uma conta no app e enviar o link do seu calendário, ai a pessoa ja vai poder agendar um horário com voce e o compromisso vai aparecer no seu Google Calendar 🚀
 
 
 ## Tecnologias utilizadas 👩🏻‍💻
 
-<div style="display:flex!important;">
-<a href="https://reactjs.org/"><img align="center" alt="Hideki-React" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg"></a>
-<a href="https://www.typescriptlang.org/"><img align="center" alt="Hideki-Ts" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-plain.svg"></a>
-<a href="https://nextjs.org/"><img align="center" alt="Hideki-HTML" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg"></a>
-</div>
-  
+- [ReactJS](https://reactjs.org/)
+- [NextJS](https://nextjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
 
 ## Aplicação
+
 O call já está disponível para acesso através do [link](https://call-chi.vercel.app), corre lá e comece a interagir com outras pessoas agora mesmo!  🚀
+
+---
 
 <p align="center">Made with 💙 by Guilherme David</p>
