@@ -15,7 +15,6 @@ import {
   IntervalItem,
 } from './styles'
 import { Container, Header } from '../styles'
-import { ArrowRight } from 'phosphor-react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -28,6 +27,7 @@ import { useState } from 'react'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { ThreeDots } from 'react-loader-spinner'
+import { ArrowRight } from '@phosphor-icons/react'
 
 const timeIntervalsFormSchema = z.object({
   intervals: z

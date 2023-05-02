@@ -1,5 +1,4 @@
 import { Button, Heading, MultiStep, Text, TextInput } from '@ignite-ui/react'
-import { ArrowRight } from 'phosphor-react'
 import { Container, Form, FormError, Header } from './styles'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -11,6 +10,7 @@ import { api } from '@/lib/axios'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { ThreeDots } from 'react-loader-spinner'
+import { ArrowRight } from '@phosphor-icons/react'
 
 const registerFormSchema = z.object({
   username: z
