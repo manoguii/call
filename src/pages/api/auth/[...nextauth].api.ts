@@ -12,8 +12,8 @@ export function buildNextAuthOptions(
 
     providers: [
       GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID_DEV ?? '',
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET_DEV ?? '',
+        clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
         authorization: {
           params: {
             // Opções para forçar a api do google enviar o refresh-token no login

@@ -12,8 +12,8 @@ export async function getGoogleOauthToken(userId: string) {
   })
 
   const auth = new google.auth.OAuth2(
-    process.env.GOOGLE_CLIENT_ID_DEV,
-    process.env.GOOGLE_CLIENT_SECRET_DEV,
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
   )
 
   auth.setCredentials({
