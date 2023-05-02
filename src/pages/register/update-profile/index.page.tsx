@@ -6,7 +6,6 @@ import {
   Text,
   TextArea,
 } from '@ignite-ui/react'
-import { ArrowRight } from 'phosphor-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -23,6 +22,7 @@ import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { useState } from 'react'
 import { ThreeDots } from 'react-loader-spinner'
+import { ArrowRight } from '@phosphor-icons/react'
 
 const updateProfileData = z.object({
   bio: z.string(),

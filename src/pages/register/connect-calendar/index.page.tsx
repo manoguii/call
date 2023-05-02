@@ -1,9 +1,8 @@
 import { Button, Heading, MultiStep, Text } from '@ignite-ui/react'
-import { Check } from '@phosphor-icons/react'
+import { ArrowRight, Check } from '@phosphor-icons/react'
 import { signIn, useSession } from 'next-auth/react'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/router'
-import { ArrowRight } from 'phosphor-react'
 import { Container, Header } from '../styles'
 import { AuthError, ConnectBox, ConnectItem } from './styles'
 

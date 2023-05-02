@@ -1,10 +1,10 @@
 import { Button, Text, TextInput } from '@ignite-ui/react'
-import { ArrowRight } from 'phosphor-react'
 import { Form, FormAnnotation } from './styles'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useRouter } from 'next/router'
+import { ArrowRight } from '@phosphor-icons/react'
 
 const claimUsernameFormSchema = z.object({
   username: z

@@ -23,6 +23,10 @@ export const Hero = styled('div', {
     marginTop: '$2',
     color: '$gray200',
   },
+
+  img: {
+    zIndex: '-1',
+  },
 })
 
 export const Preview = styled('div', {

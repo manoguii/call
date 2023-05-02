@@ -4,18 +4,18 @@ import { Button, Text, TextArea, TextInput } from '@ignite-ui/react'
 import { AxiosError } from 'axios'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
-import { CalendarBlank, Clock } from 'phosphor-react'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ThreeDots } from 'react-loader-spinner'
 import { toast } from 'react-toastify'
 import { z } from 'zod'
 import { ConfirmForm, FormActions, FormError, FormHeader } from './styles'
+import { CalendarBlank, Clock } from '@phosphor-icons/react'
 
 const confirmFormSchema = z.object({
   name: z
     .string()
-    .min(3, { message: 'O nome precisa ter no minimo 3 caracteres' }),
+    .min(3, { message: 'O nome precisa ter no mínimo 3 caracteres' }),
   email: z.string().email({ message: 'Digite um e-mail valido' }),
   observations: z.string().nullable(),
 })
