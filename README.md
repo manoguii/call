@@ -16,7 +16,9 @@
 
 - Crie um app no console do Google para a parte de autenticação.
 
-- Crie um arquivo ```.env.local``` na raiz do projeto e preencha as variáveis ambiente, o exemplo de como deve ficar esta em ```.env.example```
+- Crie um arquivo ```.env.local``` na raiz do projeto e preencha as variáveis ambiente, o exemplo de como deve ficar esta em ```.env.local.example```
+
+- Crie um arquivo ```.env``` na raiz do projeto e preencha as variáveis ambiente, o exemplo de como deve ficar esta em ```.env.example```
 
 - Clone o repositório
 ```bash
@@ -25,7 +27,7 @@ $ git clone https://github.com/manoguii/call.git
 
 - Instale as dependências
 ```bash
-$ npm install
+$ pnpm install
 ```
 
 - Crie o banco de dados local
@@ -35,13 +37,12 @@ $ docker run --name mysql -e MYSQL_ROOT_PASSWORD=docker -p 3306:3306 mysql:lates
 
 - Rodar as migrations
 ```bash
-$ npx prisma migrate dev
+$ pnpm exec prisma migrate dev
 ```
 
 - Iniciar o projeto
 ```bash
-$ npm run build
-$ npm run start
+$ pnpm dev
 ```
 
 ## Sobre

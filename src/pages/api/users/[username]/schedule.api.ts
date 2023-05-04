@@ -38,8 +38,10 @@ export default async function handler(
 
   const schedulingDate = dayjs(date).startOf('hour')
 
-  if (schedulingDate.isBefore(new Date())) {
-    return res.status(400).json({ message: 'Date is in the past' })
+  const hasTheDatePassed = schedulingDate.isBefore(new Date())
+
+  if (hasTheDatePassed) {
+    return res.status(400).json({ message: 'Date is in the past !' })
   }
 
   const conflictingScheduling = await prisma.scheduling.findFirst({
@@ -52,7 +54,7 @@ export default async function handler(
   if (conflictingScheduling) {
     return res
       .status(400)
-      .json({ message: 'There is another scheduling at the same time' })
+      .json({ message: 'There is another scheduling at the same time !' })
   }
 
   const scheduling = await prisma.scheduling.create({
@@ -60,8 +62,8 @@ export default async function handler(
       name,
       email,
       observations,
-      date: schedulingDate.toDate(),
       user_id: user.id,
+      date: schedulingDate.toDate(),
     },
   })
 
