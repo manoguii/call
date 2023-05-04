@@ -37,7 +37,7 @@ export default async function handler(
 
   if (isPastDate) {
     return res.json({
-      message: 'Date is past',
+      message: 'Date is past !',
       possibleTimes: [],
       availableTimes: [],
     })
@@ -52,7 +52,7 @@ export default async function handler(
 
   if (!userAvailability) {
     return res.json({
-      message: 'No availability',
+      message: 'No availability !',
       possibleTimes: [],
       availableTimes: [],
     })
@@ -77,7 +77,6 @@ export default async function handler(
     where: {
       user_id: user.id,
       date: {
-        // greater than or equal (GTE)
         gte: referenceDate.set('hour', startHour).toDate(),
         lte: referenceDate.set('hour', endHour).toDate(),
       },
