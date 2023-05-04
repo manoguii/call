@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import { google } from 'googleapis'
 import { prisma } from './prisma'
 
-//
+// getGoogleOauthToken -> Verifica se o token do usuário esta valido, caso não esteja, atualiza o token do usuário com o refresh-token
 export async function getGoogleOauthToken(userId: string) {
   const account = await prisma.account.findFirstOrThrow({
     where: {
