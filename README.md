@@ -1,13 +1,13 @@
-# Call
-
-## Sobre
-
-O projeto call é uma aplicação full stack de agendamento, integrada ao Google Calendar que permite agendar compromissos com outros usuários, basta criar uma conta no app e enviar o link do seu calendário, ai a pessoa ja vai poder agendar um horário com voce e o agendamento vai aparecer no seu Google Calendar.
+# Agendamento descomplicado | Call
 
 <img
   alt='Imagem do projeto'
   src='public/call.png'
 />
+
+## Sobre
+
+O projeto call é uma aplicação full stack de agendamento, integrada ao Google Calendar que permite agendar compromissos com outros usuários, basta criar uma conta no app e enviar o link do seu calendário, ai a pessoa ja vai poder agendar um horário com voce e o agendamento vai aparecer no seu Google Calendar.
 
 ## Instalação
 
