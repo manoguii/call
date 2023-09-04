@@ -1,32 +1,32 @@
-# Agendamento descomplicado | Call
+# Simplified Scheduling | Call
 
 <img
   alt='Imagem do projeto'
   src='public/call.png'
 />
 
-## Sobre
+## About
 
-O projeto call é uma aplicação full stack de agendamento, integrada ao Google Calendar que permite agendar compromissos com outros usuários, basta criar uma conta no app e enviar o link do seu calendário, ai a pessoa ja vai poder agendar um horário com voce e o agendamento vai aparecer no seu Google Calendar.
+The "call" project is a full-stack scheduling application integrated with Google Calendar. It allows you to schedule appointments with other users. Simply create an account on the app and share the link to your calendar. Then, people can schedule a time with you, and the appointment will appear on your Google Calendar.
 
-## Instalação
+## Installation
 
 ```zsh
 git clone https://github.com/manoguii/call.git
 ```
 
-- Para rodar o projeto localmente
-  1. Primeiro você precisa criar uma conta nas plataformas na qual o projeto tem integração, o projeto usa o [Google](https://console.cloud.google.com/) para autenticação do usuário, caso tenha duvidas consulte a documentação das ferramentas.
-  2. Crie um arquivo ```.env.local``` na raiz do projeto e preencha as variáveis ambiente, o exemplo de como deve ficar esta em ```.env.example```
-  3. Instale as dependências ```pnpm install```
-  4. Crie o banco de dados local ```docker run --name mysql -e MYSQL_ROOT_PASSWORD=docker -p 3306:3306 mysql:latest```
-  5. Rodar as migrations ```pnpm exec prisma migrate dev```
-  6. Execute a aplicação. ```pnpm dev```
-  7. Acesse `http://localhost:3000`
+- To run the project locally:
+  1. First, you need to create an account on the platforms with which the project integrates. The project uses [Google](https://console.cloud.google.com/) for user authentication. If you have any doubts, consult the documentation of the tools.
+  2. Create a `.env.local` file in the project's root directory and fill in the environment variables as shown in `.env.example`.
+  3. Install dependencies: `pnpm install`
+  4. Create the local database: `docker run --name mysql -e MYSQL_ROOT_PASSWORD=docker -p 3306:3306 mysql:latest`
+  5. Run the migrations: `pnpm exec prisma migrate dev`
+  6. Execute the application: `pnpm dev`
+  7. Access `http://localhost:3000`
 
-## Tecnologias utilizadas 👩🏻‍💻
+## Technologies
 
-Algumas tecnologias utilizadas para construção da aplicação.
+Some technologies used in the construction of the application.
 
 - [ReactJS](https://reactjs.org/)
 - [NextJS](https://nextjs.org/)
@@ -40,6 +40,3 @@ Algumas tecnologias utilizadas para construção da aplicação.
 - [Prisma](https://www.prisma.io/)
 - [React Query](https://tanstack.com/query/v3/)
 
----
-
-<center>Made with 💙 by Guilherme David</center>
